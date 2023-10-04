@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
-class KNN():
+class K_Nearest_Neighbors():
     def __init__(self, k, X, y):
         self.k = k
         self.X = X
@@ -17,22 +16,5 @@ class KNN():
         for i in range(len(distances)):
             dist_sorted_labels.append([y for _, y in sorted(zip(distances[i], self.y))])
 
-        predicted_labels = np.array([1 if np.count_nonzero(row[:self.k] == 1) >= self.k // 2 else 0 for row in dist_sorted_labels])
+        predicted_labels = np.array([1 if np.count_nonzero(sorted_labels_curr[:self.k]) > self.k // 2 else 0 for sorted_labels_curr in dist_sorted_labels])
         return predicted_labels
-
-
-def main():
-    data = np.loadtxt('hw3Data/D2z.txt', delimiter=' ')
-    X = np.array(data[:, 0:2])
-    y = np.array(data[:, -1])
-
-    range = np.round(np.arange(-2.0, 2.1, 0.1), 2)
-    grid = np.array(np.meshgrid(range, range)).T.reshape(-1, 2)
-
-    knn_model = KNN(1, X, y)
-    predicted_labels = knn_model.predictions(grid)
-    plt.scatter(grid[:, 0], grid[:, 1])
-    plt.show()
-
-if __name__ == '__main__':
-    main()
