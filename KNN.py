@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 
 class K_Nearest_Neighbors():
