@@ -4,12 +4,12 @@ import numpy as np
 import pandas as pd
 
 def five_fold_cross_validation(X, y, k = 1):
-    err = [0 for _ in range(5)]
+    accuracy = [0 for _ in range(5)]
     size = 1000
     
     for i in range(5):
         fold_index_start = i * size
-        fold_index_end = (i+1)*size
+        fold_index_end = (i+1) * size
         train_X = np.array(list(X)[:fold_index_start] + list(X)[fold_index_end:])
         train_y = np.array(list(y)[:fold_index_start] + list(y)[fold_index_end:])
         test_X = np.array(list(X)[fold_index_start:fold_index_end])
@@ -19,9 +19,9 @@ def five_fold_cross_validation(X, y, k = 1):
 
         fold_preds = knn_model.predictions(test_X)
         fold_error = abs(fold_preds - test_y)
-        err[i] = np.mean(fold_error)
+        accuracy[i] = 1 - np.mean(fold_error)
         
-    return err, np.mean(err)
+    return accuracy, np.mean(accuracy)
 
 
 def main():
