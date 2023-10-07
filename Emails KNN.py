@@ -2,6 +2,7 @@ from KNN import K_Nearest_Neighbors
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from sklearn.metrics import roc_curve, roc_auc_score
 
 def confusion_matrix(labels, predictions):
     true_positive, true_negative, false_positive, false_negative = 0, 0, 0, 0
@@ -43,15 +44,31 @@ def five_fold_cross_validation(X, y, k = 1):
         
     return np.array(accuracy).mean(), np.array(precision).mean(), np.array(recall).mean()
 
+def model_roc_curve(X, y):
+    X_train, X_test = X[:4000, :], X[4000:, :]
+    y_train, y_test = y[:4000], y[4000:]
+
+    knn_model = K_Nearest_Neighbors(5, X_train, y_train)
+    test_predictions_score = knn_model.predictions_prob(X_test)
+
+    fpr, tpr, thresholds = roc_curve(y_test, test_predictions_score)
+    auc = roc_auc_score(y_test, test_predictions_score)
+    print(f'AUC Logistic: {auc}')
+
+    plt.plot(fpr, tpr, label = f'AUC Logistic: {auc}')
+    plt.legend()
+    plt.show()
 
 def main():
     data = pd.read_csv('hw3Data/emails.csv', delimiter=',')
     X = np.array(data.iloc[:, 1:-1])
     y = np.array(data.iloc[:, -1])
 
-    for k in [1, 3, 5, 7, 10] :
-        accuracy, precision, recall = five_fold_cross_validation(X, y, k)
-        print("Averages:", k, accuracy, precision, recall)
+    # for k in [1, 3, 5, 7, 10] :
+    #     accuracy, precision, recall = five_fold_cross_validation(X, y, k)
+    #     print("Averages:", k, accuracy, precision, recall)
+
+    model_roc_curve(X, y)
 
 if __name__ == '__main__':
     main()

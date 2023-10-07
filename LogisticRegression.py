@@ -31,6 +31,11 @@ class Logistic_Regression():
         values = self.predict_sigmoid(X_test_with_bias)
         return np.array([1 if curr_value >= 0.5 else 0 for curr_value in values])
     
+    def predict_label_prob(self, X_test):
+        X_test_with_bias = np.column_stack((np.ones(X_test.shape[0]), X_test))
+        values = self.predict_sigmoid(X_test_with_bias)
+        return np.array(values)
+    
     
     
     
