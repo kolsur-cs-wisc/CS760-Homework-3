@@ -3,8 +3,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-def five_fold_cross_validation(X, y):
-    accuracy = [0 for _ in range(5)]
+def confusion_matrix(labels, predictions):
+    true_positive, true_negative, false_positive, false_negative = 0, 0, 0, 0
+
+    for i in range(len(labels)):
+        label = labels[i]
+        prediction = predictions[i]
+        if label == 1 and prediction == 1:
+            true_positive += 1
+        elif label == 0 and prediction == 0:
+            true_negative += 1
+        elif label == 0 and prediction == 1:
+            false_positive += 1
+        else:
+            false_negative += 1
+        
+    return true_positive, true_negative, false_positive, false_negative
+
+def five_fold_cross_validation(X, y, k = 1):
+    accuracy, precision, recall = [0] * 5, [0] * 5, [0] * 5
     size = 1000
     
     for i in range(5):
@@ -18,19 +35,23 @@ def five_fold_cross_validation(X, y):
         logistic_model = Logistic_Regression(train_X, train_y)
         logistic_model.train()
 
-        fold_preds = logistic_model.predict_labels(test_X)
-        fold_error = abs(fold_preds - test_y)
-        accuracy[i] = 1 - np.mean(fold_error)
-        print(i, accuracy)
+        fold_predictions = logistic_model.predict_labels(test_X)
+
+        true_positive, true_negative, false_positive, false_negative = confusion_matrix(test_y, fold_predictions)
+        accuracy[i] = (true_positive + true_negative) / (true_positive + true_negative + false_positive + false_negative)
+        precision[i] = (true_positive) / (true_positive + false_positive)
+        recall[i] = (true_positive) / (true_positive + false_negative)
+        print(f'Fold: {i}, Accuracy: {accuracy[i]}, Precision: {precision[i]}, Recall: {recall[i]}')
         
-    return accuracy, np.mean(accuracy)
+    return np.array(accuracy).mean(), np.array(precision).mean(), np.array(recall).mean()
 
 def main():
     data = pd.read_csv('hw3Data/emails.csv', delimiter=',')
     X = np.array(data.iloc[:, 1:-1])
     y = np.array(data.iloc[:, -1])
 
-    print(five_fold_cross_validation(X, y))
+    accuracy, precision, recall = five_fold_cross_validation(X, y)
+    print("Averages:", accuracy, precision, recall)
 
 if __name__ == '__main__':
     main()
