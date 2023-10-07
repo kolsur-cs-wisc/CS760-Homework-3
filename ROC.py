@@ -46,6 +46,7 @@ def Accuracy_KNN():
     plt.xlabel("k")
     plt.ylabel("Average Accuracy")
     plt.title("kNN 5-Fold Cross Validation")
+    plt.grid(True)
     plt.show()
 
 def main():
