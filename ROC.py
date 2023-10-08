@@ -36,11 +36,11 @@ def ROC_Emails():
     plt.show()
 
 def Accuracy_KNN():
-    points = np.array([[1, 0.8335999999999999],
-    [3, 0.8417999999999999],
-    [5, 0.842],
-    [7, 0.8460000000000001],
-    [10, 0.8555999999999999]])
+    points = np.array([[1, 0.8332],
+    [3, 0.8423999999999999],
+    [5, 0.8417999999999999],
+    [7, 0.8454],
+    [10, 0.8552]])
     
     plt.plot(points[:, 0], points[:, 1], marker = 'o')
     plt.xlabel("k")
@@ -49,9 +49,22 @@ def Accuracy_KNN():
     plt.grid(True)
     plt.show()
 
+def ROC_Given_Confidence():
+    FPR = [0, 0, 1/4, 1/2, 1]
+    TPR = [0, 1/3, 2/3, 1, 1]
+
+    plt.plot(FPR, TPR, marker = 'o', clip_on = False)
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.xlim(0, 1.05)
+    plt.ylim(0, 1.05)
+    plt.title("ROC Curve")
+    plt.show()
+
 def main():
     # ROC_Emails()
     Accuracy_KNN()
+    # ROC_Given_Confidence()
 
 if __name__ == '__main__':
     main()

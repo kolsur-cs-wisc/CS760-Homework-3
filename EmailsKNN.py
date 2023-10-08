@@ -64,11 +64,11 @@ def main():
     X = np.array(data.iloc[:, 1:-1])
     y = np.array(data.iloc[:, -1])
 
-    # for k in [1, 3, 5, 7, 10] :
-    #     accuracy, precision, recall = five_fold_cross_validation(X, y, k)
-    #     print("Averages:", k, accuracy, precision, recall)
+    for k in [1, 3, 5, 7, 10] :
+        accuracy, precision, recall = five_fold_cross_validation(X, y, k)
+        print("Averages:", k, accuracy, precision, recall)
 
-    model_roc_curve(X, y)
+    # model_roc_curve(X, y)
 
 if __name__ == '__main__':
     main()
